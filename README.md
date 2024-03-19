@@ -196,6 +196,7 @@ FAILED_RDP_WITH_GEO_CL
 | summarize event_count=count() by latitude, longitude, sourcehost, label, destination, country // Summarize event count by latitude, longitude, source host, label, destination host, and country
 ```
 - The result should look something like this
+  ![](images/failed_rdp.png)
 
 - Once results come up click the **Visualization** dropdown menu and select **Map**
 - Select **Map Settings** for additional configuration
