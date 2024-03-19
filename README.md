@@ -9,11 +9,8 @@ This project demonstrates the implementation of Microsoft's Azure Sentinel SIEM 
 
 1. [Introduction](#introduction)
 2. [Setup](#setup)
-3. [Custom PowerShell Script](#custom-powershell-script)
-4. [Azure Sentinel Configuration](#azure-sentinel-configuration)
-5. [KQL Script for Data Analysis](#kql-script-for-data-analysis)
-6. [Data Visualization](#data-visualization)
-7. [Conclusion](#conclusion)
+3. [Data Visualization](#data-visualization)
+4. [Conclusion](#conclusion)
 
 ## Introduction
 
@@ -153,7 +150,8 @@ Cyber attacks targeting cloud resources pose significant security risks for orga
 - Open file named "failed_rdp" hit **CTRL + A** to select all and **CTRL + C** to copy selection
 - Open notepad on Host PC and paste contents
 - Save to desktop as "failed_rdp.log"
-- In Azure go to Log Analytics Workspaces > Log Analytics workspace name > Tales > **Create custom log**
+- In Azure go to Log Analytics Workspaces > Log Analytics workspace name > Tables > **Create New custom log (MMA  based)**
+![](images/create_customlog.png)
 #### Sample
 - Select Sample log saved to Desktop (failed_rdp.log) and hit **Next**
 #### Record delimiter
@@ -197,6 +195,37 @@ FAILED_RDP_WITH_GEO_CL
 | where sourcehost != "" // Filter out events with empty source host
 | summarize event_count=count() by latitude, longitude, sourcehost, label, destination, country // Summarize event count by latitude, longitude, source host, label, destination host, and country
 ```
+- The result should look something like this
+
+- Once results come up click the **Visualization** dropdown menu and select **Map**
+- Select **Map Settings** for additional configuration
+#### Layout Settings
+- **Location info using** > Latitude/Longitude
+- **Latitude** > latitude_CF
+- **Longitude** > longitude_CF
+- **Size by** > event_count
+#### Color Settings
+- **Coloring Type:** Heatmap 
+- **Color by** > event_count
+- **Aggregation for color** > Sum of values
+- **Color palette** > Green to Red
+#### Metric Settings
+- **Metric Label** > label_CF
+- **Metric Value** > event_count
+- Select **Apply** button and **Save and Close**
+- Save as "Failed RDP World Map" in the same region and under the resource group (honeypotlab)
+- Continue to refresh map to display additional incoming failed RDP attacks
+> NOTE: The map will only display Event Viewer's failed RDP attempts and not all the other attacks the VM may be receiving.
+
+![](images/failed_rdp_map.png)
+
+> Event Viewer Displaying Failed RDP logon attemps. EventID 4625
+
+![](images/event_viewer.png)
+
+> Custom Powershell script parsing data from 3rd party API
+
+![](images/rdp_script.png)
 
 
 
