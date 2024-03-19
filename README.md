@@ -2,15 +2,14 @@
 
 ## Overview
 
-This project demonstrates the implementation of Microsoft's Azure Sentinel SIEM to monitor and analyze cyber attacks on an Azure Virtual Machine (VM). By deploying a vulnerable VM and utilizing a custom PowerShell script, the project captures data on attempted Remote Desktop Protocol (RDP) logons. This data, along with geolocation information obtained from a third-party API, is logged in Azure Sentinel for analysis and visualization.
+This project demonstrates the implementation of Microsoft's Azure Sentinel SIEM to monitor and analyze cyber attacks on an Azure Virtual Machine (VM). By deploying a vulnerable VM and utilizing a custom PowerShell script, the project captures data on attempted Remote Desktop Protocol (RDP) logs. This data, along with geolocation information obtained from a third-party API, is logged in Azure Sentinel for analysis and visualization.
 
 
 ## Table of Contents
 
 1. [Introduction](#introduction)
 2. [Setup](#setup)
-3. [Data Visualization](#data-visualization)
-4. [Conclusion](#conclusion)
+3. [Conclusion](#conclusion)
 
 ## Introduction
 
@@ -227,6 +226,9 @@ FAILED_RDP_WITH_GEO_CL
 > Custom Powershell script parsing data from 3rd party API
 
 ![](images/rdp_script.png)
+
+## Conclusion
+By implementing this solution, organizations can proactively monitor and respond to cyber attacks targeting their Azure VMs. Microsoft Azure Sentinel provides powerful capabilities for security analytics and threat detection, enabling organizations to strengthen their defense against evolving threats
 
 
 
