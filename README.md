@@ -153,7 +153,7 @@ Cyber attacks targeting cloud resources pose significant security risks for orga
 - Open file named "failed_rdp" hit **CTRL + A** to select all and **CTRL + C** to copy selection
 - Open notepad on Host PC and paste contents
 - Save to desktop as "failed_rdp.log"
-- In Azure go to Log Analytics Workspaces > Log Analytics workspace name (honeypot-log) > Custom logs > **Add custom log**
+- In Azure go to Log Analytics Workspaces > Log Analytics workspace name > Tales > **Create custom log**
 #### Sample
 - Select Sample log saved to Desktop (failed_rdp.log) and hit **Next**
 #### Record delimiter
@@ -173,11 +173,30 @@ Cyber attacks targeting cloud resources pose significant security risks for orga
 > May take some time for Azure to sync VM and Log Analytics
 
 ![](images/failed_rdp_with_geo.png)
-.
 
-## Custom PowerShell Script
+## Step 11: Map Data in Microsoft Sentinel
+- Go to Microsoft Sentinel to see the Overview page and available events
+- Click on **Workbooks** and **Add workbook** then click **Edit**
+- Remove default widgets (Three dots > Remove)
+- Click **Add > Add query** 
+- Copy/Paste the following query into the query window and **Run Query**
+  
+```KQL
+// Extracting fields from the custom log format FAILED_RDP_WITH_GEO_CL
+FAILED_RDP_WITH_GEO_CL 
+| extend username = extract(@"username:([^,]+)", 1, RawData), // Extract username from RawData field
+         timestamp = extract(@"timestamp:([^,]+)", 1, RawData), // Extract timestamp from RawData field
+         latitude = extract(@"latitude:([^,]+)", 1, RawData), // Extract latitude from RawData field
+         longitude = extract(@"longitude:([^,]+)", 1, RawData), // Extract longitude from RawData field
+         sourcehost = extract(@"sourcehost:([^,]+)", 1, RawData), // Extract source host from RawData field
+         state = extract(@"state:([^,]+)", 1, RawData), // Extract state from RawData field
+         label = extract(@"label:([^,]+)", 1, RawData), // Extract label from RawData field
+         destination = extract(@"destinationhost:([^,]+)", 1, RawData), // Extract destination host from RawData field
+         country = extract(@"country:([^,]+)", 1, RawData) // Extract country from RawData field
+| where destination != "samplehost" // Filter out events with destination host "samplehost"
+| where sourcehost != "" // Filter out events with empty source host
+| summarize event_count=count() by latitude, longitude, sourcehost, label, destination, country // Summarize event count by latitude, longitude, source host, label, destination host, and country
+```
 
-A custom PowerShell script is developed to capture data on attempted RDP logons and forward it to the third-party API for geolocation data extraction. The script is executed on the VM and logs events to the Event Viewer.
 
-```powershell
-# Insert your PowerShell script here
+
